@@ -440,7 +440,7 @@ case "$continue_prod" in
     # Enable and resume the scheduler for the site
     bench --site $site_name scheduler enable && \
     bench --site $site_name scheduler resume && \
-    if [[ "$bench_version" == "version-15" ]]; then
+    if [[ "$bench_version" == "version-15" || "$bench_version" == "develop" ]]; then
         echo -e "${YELLOW}Setting up Socketio, Redis and Supervisor...${NC}"
         sleep 1
         bench setup socketio
@@ -534,7 +534,7 @@ case "$continue_prod" in
     echo -e "${YELLOW}Getting your site ready for development...${NC}"
     sleep 2
     source ~/.profile
-    if [[ "$bench_version" == "version-15" ]]; then
+    if [[ "$bench_version" == "version-15" || "$bench_version" == "develop" ]]; then
         nvm alias default 18
     else
         nvm alias default 16
@@ -543,6 +543,21 @@ case "$continue_prod" in
     bench build
     echo -e "${GREEN}Done!"
     sleep 5
+
+    # Check if the site name already exists in /etc/hosts
+    if grep -q "$site_name" /etc/hosts; then
+        echo "$site_name is already in /etc/hosts"
+    else
+        # Append the site name to /etc/hosts
+        echo "Adding $site_name to /etc/hosts"
+        echo "127.0.0.1 $site_name" | sudo tee -a /etc/hosts > /dev/null
+    
+        if grep -q "$site_name" /etc/hosts; then
+            echo "$site_name successfully added to /etc/hosts"
+        else
+            echo "Failed to add $site_name to /etc/hosts"
+        fi
+    fi
 
     echo -e "${GREEN}-----------------------------------------------------------------------------------------------"
     echo -e "Congratulations! You have successfully installed Frappe and ERPNext $version_choice Development Environment."
