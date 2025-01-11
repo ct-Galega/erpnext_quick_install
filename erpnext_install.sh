@@ -110,15 +110,24 @@ sleep 3
 # Prompt user for version selection with a preliminary message
 echo -e "${YELLOW}Please enter the number of the corresponding ERPNext version you wish to install:${NC}"
 
-versions=("Version 13" "Version 14" "Version 15")
+versions=("Version 13" "Version 14" "Version 15" "develop")
 select version_choice in "${versions[@]}"; do
     case $REPLY in
         1) bench_version="version-13"; break;;
         2) bench_version="version-14"; break;;
         3) bench_version="version-15"; break;;
+        4) bench_version="develop"; break;;
         *) echo -e "${RED}Invalid option. Please select a valid version.${NC}";;
     esac
 done
+
+# Get bench name
+echo -e "${LIGHT_BLUE} Insert bench name: [frappe-bench]${NC}"
+bench_name=$(echo "$bench_name")
+
+if [[ "$bench_name" == "" ]]; then
+    $bench_name = "frappe-bench"
+fi
 
 # Confirm the version choice with the user
 echo -e "${GREEN}You have selected $version_choice for installation.${NC}"
@@ -143,7 +152,7 @@ fi
 sleep 2
 
 # Check OS compatibility for Version 15
-if [[ "$bench_version" == "version-15" ]]; then
+if [[ "$bench_version" == "version-15" || "$bench_version" == "develop" ]]; then
     if [[ "$(lsb_release -si)" != "Ubuntu" && "$(lsb_release -si)" != "Debian" ]]; then
         echo -e "${RED}Your Distro is not supported for Version 15.${NC}"
         exit 1
@@ -155,7 +164,7 @@ if [[ "$bench_version" == "version-15" ]]; then
         exit 1
     fi
 fi
-if [[ "$bench_version" != "version-15" ]]; then
+if [[ "$bench_version" != "version-15" && "$bench_version" != "develop" ]]; then
     if [[ "$(lsb_release -si)" != "Ubuntu" && "$(lsb_release -si)" != "Debian" ]]; then
         echo -e "${RED}Your Distro is not supported for Version 15.${NC}"
         exit 1
@@ -311,7 +320,7 @@ echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This
 source ~/.profile
 
 # Conditional Node.js installation based on the version of ERPNext selected
-if [[ "$bench_version" == "version-15" ]]; then
+if [[ "$bench_version" == "version-15" || "$bench_version" = "develop" ]]; then
     nvm install 18
     node_version="18"
 else
@@ -348,7 +357,7 @@ sudo pip3 install frappe-bench
 # Initiate bench in frappe-bench folder, but get a supervisor can't restart bench error...
 echo -e "${YELLOW}Initialising bench in frappe-bench folder.${NC}"
 echo -e "${LIGHT_BLUE}If you get a restart failed, don't worry, we will resolve that later.${NC}"
-bench init frappe-bench --version $bench_version --verbose
+bench init $bench_name --version $bench_version --verbose
 echo -e "${GREEN}Bench installation complete!${NC}"
 sleep 1
 
@@ -362,7 +371,7 @@ sleep 2
 echo -e "${YELLOW}Now setting up your site. This might take a few minutes. Please wait...${NC}"
 sleep 1
 # Change directory to frappe-bench
-cd frappe-bench && \
+cd $bench_name && \
 
 sudo chmod -R o+rx $(echo $HOME)
 
