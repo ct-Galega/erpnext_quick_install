@@ -123,11 +123,15 @@ done
 
 # Get bench name
 echo -e "${LIGHT_BLUE} Insert bench name: [frappe-bench]${NC}"
-bench_name=$(echo "$bench_name")
+read -r bench_name
 
-if [[ "$bench_name" == "" ]]; then
-    $bench_name = "frappe-bench"
+# Set default if bench_name is empty
+if [[ -z "$bench_name" ]]; then
+    bench_name="frappe-bench"
 fi
+
+# Debugging output (optional)
+echo "Using bench name: $bench_name"
 
 # Confirm the version choice with the user
 echo -e "${GREEN}You have selected $version_choice for installation.${NC}"
