@@ -272,11 +272,11 @@ echo -e "\n"
 # sleep 2
 # sudo apt install mariadb-server mariadb-client -y
 
-# Add MariaDB official repository for version 10.7
+# Add MariaDB official repository for version 10.11
 sudo apt install -y software-properties-common dirmngr
 sudo mkdir -p /etc/apt/keyrings
 sudo wget -O /etc/apt/keyrings/mariadb-keyring.pgp https://supplychain.mariadb.com/MariaDB-Enterprise-GPG-KEY
-echo "deb [signed-by=/etc/apt/keyrings/mariadb-keyring.pgp] https://mirror.mariadb.org/repo/10.7/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/mariadb.list
+echo "deb [signed-by=/etc/apt/keyrings/mariadb-keyring.pgp] https://mirror.mariadb.org/repo/10.11/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/mariadb.list
 
 # Update package list and install MariaDB 10.7
 sudo apt update
