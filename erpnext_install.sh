@@ -268,9 +268,20 @@ echo -e "${GREEN}Done!${NC}"
 sleep 1
 echo -e "\n"
 #... And mariadb with some extra needed applications.
-echo -e "${YELLOW}Now installing MariaDB and other necessary packages...${NC}"
-sleep 2
-sudo apt install mariadb-server mariadb-client -y
+# echo -e "${YELLOW}Now installing MariaDB and other necessary packages...${NC}"
+# sleep 2
+# sudo apt install mariadb-server mariadb-client -y
+
+# Add MariaDB official repository for version 10.7
+sudo apt install -y software-properties-common dirmngr
+sudo mkdir -p /etc/apt/keyrings
+sudo wget -O /etc/apt/keyrings/mariadb-keyring.pgp https://supplychain.mariadb.com/MariaDB-Enterprise-GPG-KEY
+echo "deb [signed-by=/etc/apt/keyrings/mariadb-keyring.pgp] https://mirror.mariadb.org/repo/10.7/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/mariadb.list
+
+# Update package list and install MariaDB 10.7
+sudo apt update
+sudo apt install -y mariadb-server mariadb-client
+
 echo -e "${GREEN}MariaDB and other packages have been installed successfully.${NC}"
 sleep 2
 
