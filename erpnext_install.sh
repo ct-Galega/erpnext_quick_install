@@ -276,7 +276,7 @@ echo -e "\n"
 # lets unsigned repo
 
 sudo apt update --allow-insecure-repositories
-sudo apt install -y --allow-unauthenticated mariadb-server mariadb-client
+sudo apt install -y --allow-unauthenticated mariadb-server mariadb-client libmariadb-dev pkg-config
 
 sudo apt install -y software-properties-common dirmngr
 sudo mkdir -p /etc/apt/keyrings
@@ -289,6 +289,8 @@ sudo apt install -y mariadb-server mariadb-client
 
 echo -e "${GREEN}MariaDB and other packages have been installed successfully.${NC}"
 sleep 2
+
+sudo service mysql restart
 
 # Use a hidden marker file to determine if this section of the script has run before.
 MARKER_FILE=~/.mysql_configured.marker
