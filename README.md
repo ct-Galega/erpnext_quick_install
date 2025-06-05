@@ -30,7 +30,7 @@ Is the information correct? [Y]
 ```
 2. Add the user to sudoers:
 ```
-usermod -aG sudo frappe
+sudo usermod -aG sudo frappe
 ```
 3. Switch to created user:
 ```
