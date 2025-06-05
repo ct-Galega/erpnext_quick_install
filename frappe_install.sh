@@ -523,7 +523,9 @@ case "$continue_prod" in
             # Obtain and Install the certificate
             echo -e "${YELLOW}Obtaining and installing SSL certificate...${NC}"
             sleep 2
-            sudo certbot --nginx --non-interactive --agree-tos --email $email_address -d $site_name
+            # sudo certbot --nginx --non-interactive --agree-tos --email $email_address -d $site_name
+            bench config dns_multitenant on
+            sudo -H bench setup lets-encrypt $site_name
             echo -e "${GREEN}SSL certificate installed successfully.${NC}"
             sleep 2
             ;;
